@@ -288,12 +288,12 @@ export class PermissionStore {
 					tool: string;
 					args_json: string;
 					reason: string;
-					status: "pending" | "approved" | "rejected";
-					created_at: string;
-					resolved_at?: string;
-					resolved_by?: string;
-			  }
-			| undefined;
+				status: "pending" | "approved" | "rejected";
+				created_at: string;
+				resolved_at?: string;
+				resolved_by?: string;
+			}
+		| undefined;
 
 		if (!row) return null;
 
