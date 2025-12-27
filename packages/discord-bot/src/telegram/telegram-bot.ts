@@ -159,24 +159,22 @@ async function runAgent(
 			content: m.content,
 		}));
 
-		// Create model config (reserved for pi-agent-core integration)
+		// Create model config - Z.AI GLM-4.7 (top coding model, cheaper than OpenRouter)
 		const _modelConfig = {
-			provider: "openrouter" as const,
-			model: "anthropic/claude-sonnet-4",
-			apiKey: process.env.OPENROUTER_API_KEY!,
+			provider: "zai" as const,
+			model: "glm-4.7",
+			apiKey: process.env.ZAI_API_KEY!,
 		};
 
-		// For now, use a simple fetch-based approach
-		const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+		// Use Z.AI API (OpenAI-compatible) - GLM Coding Plan subscription
+		const response = await fetch("https://api.z.ai/api/coding/paas/v4/chat/completions", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-				"HTTP-Referer": "https://pi-agent.dev",
-				"X-Title": "Pi Telegram Agent",
+				Authorization: `Bearer ${process.env.ZAI_API_KEY}`,
 			},
 			body: JSON.stringify({
-				model: "anthropic/claude-sonnet-4",
+				model: "glm-4.7",
 				messages: [{ role: "system", content: mode.systemPrompt }, ...messages],
 				max_tokens: 4096,
 				stream: false,
@@ -588,15 +586,15 @@ Uptime: Active
 		}
 
 		try {
-			// Quick AI response for inline queries
-			const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+			// Quick AI response for inline queries - Z.AI GLM-4.7 (cheaper than OpenRouter)
+			const response = await fetch("https://api.z.ai/api/coding/paas/v4/chat/completions", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+					Authorization: `Bearer ${process.env.ZAI_API_KEY}`,
 				},
 				body: JSON.stringify({
-					model: "anthropic/claude-3-haiku",
+					model: "glm-4.7",
 					messages: [
 						{
 							role: "system",
