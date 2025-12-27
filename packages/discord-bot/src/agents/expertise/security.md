@@ -3,7 +3,7 @@
 ## Mental Model
 Accumulated expertise for security tasks.
 
-*Last updated: 2025-12-26 13:18:20 UTC*
+*Last updated: 2025-12-27 01:00:20 UTC*
 *Total sessions: 6*
 
 ## Patterns Learned
@@ -27,16 +27,6 @@ Accumulated expertise for security tasks.
 - Fail2ban for brute force protection
 
 ## Session Insights
-
-### 2025-12-25 19:58:24 UTC
-**Task:** Implement authentication
-
-## What I Learned
-			- JWT tokens are stateless and scalable
-			- Always validate token expiration
-			- Use bcrypt for password hashing
-
-			The pattern I discovered was to separate auth logic from business logic.
 
 ### 2025-12-25 20:21:45 UTC
 **Task:** Implement authentication
@@ -72,3 +62,13 @@ Accumulated expertise for security tasks.
 **Task:** check security
 
 **Security Score: 7.5/10** ⬆️ (from 7/10 on Dec 24)
+
+### 2025-12-27 01:00:20 UTC
+**Task:** Implement authentication
+
+## What I Learned
+			- JWT tokens are stateless and scalable
+			- Always validate token expiration
+			- Use bcrypt for password hashing
+
+			The pattern I discovered was to separate auth logic from business logic.
