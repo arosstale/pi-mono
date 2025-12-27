@@ -11,9 +11,7 @@ export const statusCommand = defineCommand({
 	name: "status",
 	category: "utilities",
 
-	definition: new SlashCommandBuilder()
-		.setName("status")
-		.setDescription("Show bot status and current model"),
+	definition: new SlashCommandBuilder().setName("status").setDescription("Show bot status and current model"),
 
 	execute: async (interaction, context) => {
 		const { services } = context;

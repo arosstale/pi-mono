@@ -1578,27 +1578,27 @@ export class BotDatabase {
 				workflow_id: string;
 				step: string;
 				state: string;
-			reason: string;
-			suspended_at: string;
-			expires_at: string | null;
-			resume_input: string | null;
-			metadata: string | null;
-		}
-	| undefined {
-		const stmt = this._db.prepare("SELECT * FROM suspended_workflows WHERE id = ?");
-		return stmt.get(id) as
-		| {
-				id: string;
-				workflow_id: string;
-				step: string;
-				state: string;
 				reason: string;
 				suspended_at: string;
 				expires_at: string | null;
 				resume_input: string | null;
 				metadata: string | null;
-			}
-		| undefined;
+		  }
+		| undefined {
+		const stmt = this._db.prepare("SELECT * FROM suspended_workflows WHERE id = ?");
+		return stmt.get(id) as
+			| {
+					id: string;
+					workflow_id: string;
+					step: string;
+					state: string;
+					reason: string;
+					suspended_at: string;
+					expires_at: string | null;
+					resume_input: string | null;
+					metadata: string | null;
+			  }
+			| undefined;
 	}
 
 	/**

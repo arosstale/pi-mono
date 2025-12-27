@@ -140,14 +140,10 @@ export class AgentFactory {
 			providerName?: string;
 		},
 	): Agent {
-		const provider = options.providerName
-			? this.getProvider(options.providerName)
-			: this.defaultProvider;
+		const provider = options.providerName ? this.getProvider(options.providerName) : this.defaultProvider;
 
 		const basePrompt = this.getBasePrompt(type);
-		const systemPrompt = options.systemPrompt
-			? `${basePrompt}\n\n${options.systemPrompt}`
-			: basePrompt;
+		const systemPrompt = options.systemPrompt ? `${basePrompt}\n\n${options.systemPrompt}` : basePrompt;
 
 		const model = options.model ?? this.modelCreator(options.modelId ?? this.getDefaultModelId(type));
 
@@ -202,10 +198,7 @@ let factoryInstance: AgentFactory | null = null;
 /**
  * Initialize the agent factory with default provider and model creator
  */
-export function initAgentFactory(
-	defaultProvider: ProviderConfig,
-	modelCreator: ModelCreator,
-): AgentFactory {
+export function initAgentFactory(defaultProvider: ProviderConfig, modelCreator: ModelCreator): AgentFactory {
 	factoryInstance = new AgentFactory(defaultProvider, modelCreator);
 	return factoryInstance;
 }

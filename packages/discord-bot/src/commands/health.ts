@@ -12,9 +12,7 @@ export const healthCommand = defineCommand({
 	name: "health",
 	category: "utilities",
 
-	definition: new SlashCommandBuilder()
-		.setName("health")
-		.setDescription("Check bot health and API status"),
+	definition: new SlashCommandBuilder().setName("health").setDescription("Check bot health and API status"),
 
 	execute: async (interaction, _context) => {
 		await interaction.deferReply();

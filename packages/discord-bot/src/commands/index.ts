@@ -17,38 +17,31 @@
  *   }
  */
 
-// Types
-export type {
-	CommandHandler,
-	CommandContext,
-	CommandCategory,
-	CommandServices,
-	CommandDefinition,
-	BotStats,
-} from "./types.js";
-
 // Registry
 export { commandRegistry, defineCommand } from "./registry.js";
-import { commandRegistry } from "./registry.js";
+// Types
+export type {
+	BotStats,
+	CommandCategory,
+	CommandContext,
+	CommandDefinition,
+	CommandHandler,
+	CommandServices,
+} from "./types.js";
 
-// Commands - import as we migrate them
-import { healthCommand } from "./health.js";
-import { statusCommand } from "./status.js";
 import { askCommand } from "./ask.js";
 import { bashCommand } from "./bash.js";
+// Commands - import as we migrate them
+import { healthCommand } from "./health.js";
 import { readCommand } from "./read.js";
+import { commandRegistry } from "./registry.js";
+import { statusCommand } from "./status.js";
 
 /**
  * All migrated commands
  * Add new commands here as they are migrated from main.ts
  */
-const commands = [
-	healthCommand,
-	statusCommand,
-	askCommand,
-	bashCommand,
-	readCommand,
-];
+const commands = [healthCommand, statusCommand, askCommand, bashCommand, readCommand];
 
 /**
  * Register all commands with the registry

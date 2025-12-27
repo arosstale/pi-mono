@@ -17,16 +17,10 @@ const askDefinition: CommandDefinitionMeta = {
 		.setName("ask")
 		.setDescription("Ask the AI assistant anything")
 		.addStringOption((option) =>
-			option
-				.setName("prompt")
-				.setDescription("Your question or request")
-				.setRequired(true),
+			option.setName("prompt").setDescription("Your question or request").setRequired(true),
 		)
 		.addBooleanOption((option) =>
-			option
-				.setName("ephemeral")
-				.setDescription("Only you can see the response")
-				.setRequired(false),
+			option.setName("ephemeral").setDescription("Only you can see the response").setRequired(false),
 		),
 };
 
@@ -39,10 +33,7 @@ const bashDefinition: CommandDefinitionMeta = {
 		.setName("bash")
 		.setDescription("Execute a shell command")
 		.addStringOption((option) =>
-			option
-				.setName("command")
-				.setDescription("The command to execute")
-				.setRequired(true),
+			option.setName("command").setDescription("The command to execute").setRequired(true),
 		),
 };
 
@@ -54,17 +45,9 @@ const readDefinition: CommandDefinitionMeta = {
 	definition: new SlashCommandBuilder()
 		.setName("read")
 		.setDescription("Read a file's contents")
-		.addStringOption((option) =>
-			option
-				.setName("path")
-				.setDescription("Path to the file")
-				.setRequired(true),
-		)
+		.addStringOption((option) => option.setName("path").setDescription("Path to the file").setRequired(true))
 		.addIntegerOption((option) =>
-			option
-				.setName("lines")
-				.setDescription("Number of lines to read (default: all)")
-				.setRequired(false),
+			option.setName("lines").setDescription("Number of lines to read (default: all)").setRequired(false),
 		),
 };
 
@@ -73,9 +56,7 @@ const readDefinition: CommandDefinitionMeta = {
  */
 const healthDefinition: CommandDefinitionMeta = {
 	category: "utilities",
-	definition: new SlashCommandBuilder()
-		.setName("health")
-		.setDescription("Check bot health and API status"),
+	definition: new SlashCommandBuilder().setName("health").setDescription("Check bot health and API status"),
 };
 
 /**
@@ -83,9 +64,7 @@ const healthDefinition: CommandDefinitionMeta = {
  */
 const statusDefinition: CommandDefinitionMeta = {
 	category: "utilities",
-	definition: new SlashCommandBuilder()
-		.setName("status")
-		.setDescription("View bot status and statistics"),
+	definition: new SlashCommandBuilder().setName("status").setDescription("View bot status and statistics"),
 };
 
 /**
@@ -93,9 +72,7 @@ const statusDefinition: CommandDefinitionMeta = {
  */
 const resetDefinition: CommandDefinitionMeta = {
 	category: "utilities",
-	definition: new SlashCommandBuilder()
-		.setName("reset")
-		.setDescription("Clear conversation history for this channel"),
+	definition: new SlashCommandBuilder().setName("reset").setDescription("Clear conversation history for this channel"),
 };
 
 /**

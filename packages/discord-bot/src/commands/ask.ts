@@ -45,9 +45,7 @@ export const askCommand = defineCommand({
 	definition: new SlashCommandBuilder()
 		.setName("ask")
 		.setDescription("Ask the AI agent a question")
-		.addStringOption((opt) =>
-			opt.setName("question").setDescription("Your question").setRequired(true),
-		),
+		.addStringOption((opt) => opt.setName("question").setDescription("Your question").setRequired(true)),
 
 	execute: async (interaction, context) => {
 		const question = interaction.options.getString("question", true);

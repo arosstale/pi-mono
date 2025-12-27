@@ -8,8 +8,8 @@
 import type {
 	ChatInputCommandInteraction,
 	SlashCommandBuilder,
-	SlashCommandSubcommandsOnlyBuilder,
 	SlashCommandOptionsOnlyBuilder,
+	SlashCommandSubcommandsOnlyBuilder,
 } from "discord.js";
 
 /**
@@ -31,10 +31,7 @@ export interface CommandHandler {
 	definition: CommandDefinition;
 
 	/** Execute the command */
-	execute: (
-		interaction: ChatInputCommandInteraction,
-		context: CommandContext,
-	) => Promise<void>;
+	execute: (interaction: ChatInputCommandInteraction, context: CommandContext) => Promise<void>;
 
 	/** Optional: Check if command is available */
 	isAvailable?: () => boolean;

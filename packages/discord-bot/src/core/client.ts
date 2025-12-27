@@ -26,31 +26,19 @@ export interface ClientOptions {
  * Factory Pattern: Encapsulates complex client creation
  */
 export function createClient(options: ClientOptions = {}): Client {
-	const {
-		voice = true,
-		directMessages = true,
-		messageContent = true,
-	} = options;
+	const { voice = true, directMessages = true, messageContent = true } = options;
 
-	const intents: GatewayIntentBits[] = [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMessages,
-	];
+	const intents: GatewayIntentBits[] = [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages];
 
 	const partials: Partials[] = [];
 
 	// Add optional intents
 	if (voice) {
-		intents.push(
-			GatewayIntentBits.GuildVoiceStates,
-		);
+		intents.push(GatewayIntentBits.GuildVoiceStates);
 	}
 
 	if (directMessages) {
-		intents.push(
-			GatewayIntentBits.DirectMessages,
-			GatewayIntentBits.DirectMessageReactions,
-		);
+		intents.push(GatewayIntentBits.DirectMessages, GatewayIntentBits.DirectMessageReactions);
 		partials.push(Partials.Channel, Partials.Message);
 	}
 

@@ -5,7 +5,7 @@
  * SRP: Only handles command registration and lookup
  */
 
-import type { CommandHandler, CommandCategory } from "./types.js";
+import type { CommandCategory, CommandHandler } from "./types.js";
 
 /**
  * Command registry - singleton pattern

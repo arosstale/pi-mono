@@ -5,10 +5,7 @@
  * DIP: Depend on abstractions (interfaces), not concretions
  */
 
-import type {
-	SlashCommandBuilder,
-	SlashCommandSubcommandsOnlyBuilder,
-} from "discord.js";
+import type { SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
 
 /**
  * Command definition type - what Discord needs to register
@@ -42,12 +39,12 @@ export interface CommandDefinitionMeta {
  * Command categories - ISP: segregate by purpose
  */
 export type CommandCategory =
-	| "core"       // ask, bash, read, write
-	| "memory"     // remember, forget, memory
-	| "trading"    // trading, papertrade, signals
-	| "agents"     // expert, openhands, daemon, research
-	| "voice"      // voice, livekit, suno
-	| "admin"      // admin, provider, model, analytics
-	| "utilities"  // health, status, tools, reset
-	| "ai"         // hf, browse, generate
-	| "social";    // twitter, telegram
+	| "core" // ask, bash, read, write
+	| "memory" // remember, forget, memory
+	| "trading" // trading, papertrade, signals
+	| "agents" // expert, openhands, daemon, research
+	| "voice" // voice, livekit, suno
+	| "admin" // admin, provider, model, analytics
+	| "utilities" // health, status, tools, reset
+	| "ai" // hf, browse, generate
+	| "social"; // twitter, telegram

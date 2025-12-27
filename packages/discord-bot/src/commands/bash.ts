@@ -8,13 +8,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import { defineCommand } from "./registry.js";
 
-const DANGEROUS_PATTERNS = [
-	/rm\s+-rf?\s+[\/~]/,
-	/>\s*\/dev\/sd/,
-	/mkfs\./,
-	/dd\s+if=/,
-	/:(){ :|:& };:/,
-];
+const DANGEROUS_PATTERNS = [/rm\s+-rf?\s+[/~]/, />\s*\/dev\/sd/, /mkfs\./, /dd\s+if=/, /:(){ :|:& };:/];
 
 function isDangerousCommand(command: string): boolean {
 	return DANGEROUS_PATTERNS.some((p) => p.test(command));
@@ -27,15 +21,8 @@ export const bashCommand = defineCommand({
 	definition: new SlashCommandBuilder()
 		.setName("bash")
 		.setDescription("Execute a shell command")
-		.addStringOption((opt) =>
-			opt.setName("command").setDescription("Command to execute").setRequired(true),
-		)
-		.addIntegerOption((opt) =>
-			opt
-				.setName("timeout")
-				.setDescription("Timeout in milliseconds")
-				.setRequired(false),
-		),
+		.addStringOption((opt) => opt.setName("command").setDescription("Command to execute").setRequired(true))
+		.addIntegerOption((opt) => opt.setName("timeout").setDescription("Timeout in milliseconds").setRequired(false)),
 
 	execute: async (interaction, context) => {
 		const command = interaction.options.getString("command", true);
@@ -44,9 +31,7 @@ export const bashCommand = defineCommand({
 
 		// Log dangerous commands but execute (YOLO mode)
 		if (isDangerousCommand(command)) {
-			console.warn(
-				`[YOLO] /bash dangerous command from ${interaction.user.username}: ${command.substring(0, 100)}`,
-			);
+			console.warn(`[YOLO] /bash dangerous command from ${interaction.user.username}: ${command.substring(0, 100)}`);
 		}
 
 		await interaction.deferReply();

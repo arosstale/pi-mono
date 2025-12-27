@@ -84,19 +84,12 @@ export class CostOptimizedStrategy implements IModelStrategy {
 		const filtered = this.filterByCapabilities(models, context.requiredCapabilities);
 		if (filtered.length === 0) return null;
 
-		return filtered.reduce((cheapest, model) =>
-			model.costPerMToken < cheapest.costPerMToken ? model : cheapest,
-		);
+		return filtered.reduce((cheapest, model) => (model.costPerMToken < cheapest.costPerMToken ? model : cheapest));
 	}
 
-	private filterByCapabilities(
-		models: ModelInfo[],
-		required?: ModelCapability[],
-	): ModelInfo[] {
+	private filterByCapabilities(models: ModelInfo[], required?: ModelCapability[]): ModelInfo[] {
 		if (!required || required.length === 0) return models;
-		return models.filter((m) =>
-			required.every((cap) => m.capabilities.includes(cap)),
-		);
+		return models.filter((m) => required.every((cap) => m.capabilities.includes(cap)));
 	}
 }
 
@@ -111,17 +104,13 @@ export class SpeedOptimizedStrategy implements IModelStrategy {
 	select(context: SelectionContext, models: ModelInfo[]): ModelInfo | null {
 		const filtered = models.filter((m) => {
 			if (!context.requiredCapabilities) return true;
-			return context.requiredCapabilities.every((cap) =>
-				m.capabilities.includes(cap),
-			);
+			return context.requiredCapabilities.every((cap) => m.capabilities.includes(cap));
 		});
 
 		if (filtered.length === 0) return null;
 
 		return filtered.reduce((fastest, model) =>
-			this.speedRank[model.speed] < this.speedRank[fastest.speed]
-				? model
-				: fastest,
+			this.speedRank[model.speed] < this.speedRank[fastest.speed] ? model : fastest,
 		);
 	}
 }
@@ -167,16 +156,12 @@ export class ContextAwareStrategy implements IModelStrategy {
 
 		if (suitable.length === 0) {
 			// Fall back to model with largest context
-			return models.reduce((largest, m) =>
-				m.contextLength > largest.contextLength ? m : largest,
-			);
+			return models.reduce((largest, m) => (m.contextLength > largest.contextLength ? m : largest));
 		}
 
 		// Among suitable, prefer based on optimization goal
 		if (context.optimizeFor === "cost") {
-			return suitable.reduce((cheapest, m) =>
-				m.costPerMToken < cheapest.costPerMToken ? m : cheapest,
-			);
+			return suitable.reduce((cheapest, m) => (m.costPerMToken < cheapest.costPerMToken ? m : cheapest));
 		}
 
 		return suitable[0];
@@ -221,7 +206,7 @@ export class ModelRouter {
 	 */
 	select(context: SelectionContext, strategyName?: string): ModelInfo | null {
 		const strategy = strategyName
-			? this.strategies.get(strategyName) ?? this.defaultStrategy
+			? (this.strategies.get(strategyName) ?? this.defaultStrategy)
 			: this.defaultStrategy;
 
 		return strategy.select(context, this.models);

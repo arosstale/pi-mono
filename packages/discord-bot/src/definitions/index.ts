@@ -10,10 +10,11 @@
  */
 
 // Types
-export type { CommandDefinition, CommandDefinitionMeta, CommandCategory } from "./types.js";
+export type { CommandCategory, CommandDefinition, CommandDefinitionMeta } from "./types.js";
 
 // Definition modules - add new categories here
 import { coreDefinitions } from "./core.js";
+
 // import { tradingDefinitions } from "./trading.js";
 // import { agentDefinitions } from "./agents.js";
 // import { voiceDefinitions } from "./voice.js";
@@ -49,7 +50,5 @@ export function getDefinitionsByCategory(category: string) {
  * Get just the SlashCommandBuilder objects for Discord registration
  */
 export function getSlashCommandBuilders() {
-	return allDefinitions
-		.filter((def) => def.enabled !== false)
-		.map((def) => def.definition);
+	return allDefinitions.filter((def) => def.enabled !== false).map((def) => def.definition);
 }

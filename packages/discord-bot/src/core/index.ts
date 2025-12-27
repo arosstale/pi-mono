@@ -10,15 +10,14 @@
  *   await startBot(bot);
  */
 
-// Configuration
-export { loadConfig, validateConfig, type BotConfig } from "./config.js";
-
 // Client factory
-export { createClient, createDefaultClient, type ClientOptions } from "./client.js";
+export { type ClientOptions, createClient, createDefaultClient } from "./client.js";
+// Configuration
+export { type BotConfig, loadConfig, validateConfig } from "./config.js";
 
 import type { Client } from "discord.js";
-import { loadConfig, validateConfig, type BotConfig } from "./config.js";
 import { createDefaultClient } from "./client.js";
+import { type BotConfig, loadConfig, validateConfig } from "./config.js";
 
 /**
  * Bot instance with configuration
