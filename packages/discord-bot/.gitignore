@@ -1,0 +1,10 @@
+# Database files
+*.db
+bot.db
+
+# Runtime data
+data/
+datasette.pid
+
+# Session files
+*.jsonl
