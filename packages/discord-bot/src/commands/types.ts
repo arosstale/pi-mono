@@ -9,7 +9,16 @@ import type {
 	ChatInputCommandInteraction,
 	SlashCommandBuilder,
 	SlashCommandSubcommandsOnlyBuilder,
+	SlashCommandOptionsOnlyBuilder,
 } from "discord.js";
+
+/**
+ * Command definition type - flexible to support all builder patterns
+ */
+export type CommandDefinition =
+	| SlashCommandBuilder
+	| SlashCommandSubcommandsOnlyBuilder
+	| SlashCommandOptionsOnlyBuilder;
 
 /**
  * Command handler interface - each command implements this
@@ -19,10 +28,7 @@ export interface CommandHandler {
 	name: string;
 
 	/** Command definition for Discord */
-	definition:
-		| SlashCommandBuilder
-		| SlashCommandSubcommandsOnlyBuilder
-		| Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
+	definition: CommandDefinition;
 
 	/** Execute the command */
 	execute: (
@@ -35,6 +41,50 @@ export interface CommandHandler {
 
 	/** Optional: Command category for organization */
 	category?: CommandCategory;
+}
+
+/**
+ * Bot statistics interface
+ */
+export interface BotStats {
+	startTime: number;
+	commandsProcessed: number;
+}
+
+/**
+ * Services interface - DIP: depend on abstractions
+ */
+export interface CommandServices {
+	/** Execute shell command */
+	execCommand: (
+		command: string,
+		options?: { timeout?: number },
+	) => Promise<{ stdout: string; stderr: string; code: number }>;
+
+	/** Handle AI agent request */
+	handleAgentRequest?: (
+		channelId: string,
+		channelName: string,
+		username: string,
+		userId: string,
+		message: string,
+		workingDir: string,
+		onUpdate: (content: string) => Promise<void>,
+		onComplete: (content: string) => Promise<void>,
+		sourceMessage: unknown,
+	) => Promise<void>;
+
+	/** Get current model ID for user */
+	getCurrentModelId?: (userId: string) => string;
+
+	/** Global model ID */
+	globalModelId?: string;
+
+	/** Get bot statistics */
+	getBotStats?: () => BotStats;
+
+	/** Get active channel count */
+	getActiveChannelCount?: () => number;
 }
 
 /**
@@ -58,6 +108,9 @@ export interface CommandContext {
 
 	/** Guild ID (if in a server) */
 	guildId?: string;
+
+	/** Services for command execution */
+	services: CommandServices;
 }
 
 /**

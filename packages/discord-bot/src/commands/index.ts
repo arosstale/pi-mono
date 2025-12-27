@@ -18,7 +18,14 @@
  */
 
 // Types
-export type { CommandHandler, CommandContext, CommandCategory } from "./types.js";
+export type {
+	CommandHandler,
+	CommandContext,
+	CommandCategory,
+	CommandServices,
+	CommandDefinition,
+	BotStats,
+} from "./types.js";
 
 // Registry
 export { commandRegistry, defineCommand } from "./registry.js";
@@ -26,6 +33,10 @@ import { commandRegistry } from "./registry.js";
 
 // Commands - import as we migrate them
 import { healthCommand } from "./health.js";
+import { statusCommand } from "./status.js";
+import { askCommand } from "./ask.js";
+import { bashCommand } from "./bash.js";
+import { readCommand } from "./read.js";
 
 /**
  * All migrated commands
@@ -33,11 +44,10 @@ import { healthCommand } from "./health.js";
  */
 const commands = [
 	healthCommand,
-	// Add more commands as they are migrated:
-	// askCommand,
-	// bashCommand,
-	// sandboxCommand,
-	// etc.
+	statusCommand,
+	askCommand,
+	bashCommand,
+	readCommand,
 ];
 
 /**
