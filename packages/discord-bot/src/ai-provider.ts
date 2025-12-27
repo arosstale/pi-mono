@@ -32,44 +32,35 @@ export interface ChatResult {
 	};
 }
 
-// Provider configuration
+// Provider configuration - NO PAID MODELS
 const PROVIDERS = {
+	// Z.AI GLM (subscription) - PRIMARY
 	zai: {
 		name: "Z.AI GLM",
 		baseUrl: "https://api.z.ai/api/coding/paas/v4",
 		defaultModel: "glm-4.7",
 		getApiKey: () => process.env.ZAI_API_KEY,
 	},
-	// OpenRouter FREE models - no cost fallback
-	openrouter_free: {
-		name: "OpenRouter (FREE)",
+	// Devstral 2 FREE - FALLBACK
+	devstral: {
+		name: "Devstral 2 (FREE)",
 		baseUrl: "https://openrouter.ai/api/v1",
-		defaultModel: "mistralai/devstral-2512:free", // Devstral 2 - fast coding model
-		getApiKey: () => process.env.OPENROUTER_API_KEY,
-	},
-	// Paid OpenRouter as last resort
-	openrouter: {
-		name: "OpenRouter",
-		baseUrl: "https://openrouter.ai/api/v1",
-		defaultModel: "anthropic/claude-sonnet-4",
+		defaultModel: "mistralai/devstral-2512:free",
 		getApiKey: () => process.env.OPENROUTER_API_KEY,
 	},
 } as const;
 
-// Free OpenRouter models to try in order
-const FREE_OPENROUTER_MODELS = [
-	"mistralai/devstral-2512:free",    // Devstral 2 - FAST coding (default)
-	"openai/gpt-oss-120b:free",        // OpenAI OSS 120B - best quality
-	"deepseek/deepseek-r1-0528:free",  // DeepSeek R1 - strong reasoning
-	"qwen/qwen3-coder-480b-a35b:free", // Qwen Coder 480B - coding
-	"z-ai/glm-4.5-air:free",           // GLM 4.5 Air - general
-	"moonshotai/kimi-k2-0711:free",    // Kimi K2 - agentic
-];
+// Z.AI GLM models available (subscription)
+export const ZAI_MODELS = {
+	"glm-4.7": "GLM 4.7 (Top Coding)",
+	"glm-4.6": "GLM 4.6 (Stable)",
+	"glm-4.5-air": "GLM 4.5 Air (Fast)",
+};
 
 type ProviderName = keyof typeof PROVIDERS;
 
-// Default provider order - Z.AI first, then FREE OpenRouter, paid last
-const PROVIDER_PRIORITY: ProviderName[] = ["zai", "openrouter_free", "openrouter"];
+// Provider order: Z.AI first, Devstral FREE fallback (NO PAID)
+const PROVIDER_PRIORITY: ProviderName[] = ["zai", "devstral"];
 
 /**
  * Get the first available provider with a valid API key
@@ -110,7 +101,7 @@ export async function chat(options: ChatOptions): Promise<ChatResult> {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${apiKey}`,
-				...(provider.name === "openrouter" && {
+				...(provider.name === "devstral" && {
 					"HTTP-Referer": "https://pi-agent.dev",
 					"X-Title": "Pi Bot",
 				}),
