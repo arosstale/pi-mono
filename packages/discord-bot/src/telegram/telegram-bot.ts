@@ -174,7 +174,7 @@ async function runAgent(
 				Authorization: `Bearer ${process.env.ZAI_API_KEY}`,
 			},
 			body: JSON.stringify({
-				model: "glm-4.7",
+				model: "glm-4.5-air",  // Fast model for Telegram
 				messages: [{ role: "system", content: mode.systemPrompt }, ...messages],
 				max_tokens: 4096,
 				stream: false,
@@ -586,7 +586,7 @@ Uptime: Active
 		}
 
 		try {
-			// Quick AI response for inline queries - Z.AI GLM-4.7 (cheaper than OpenRouter)
+			// Quick AI response for inline queries - Z.AI GLM-4.5-air (fast)
 			const response = await fetch("https://api.z.ai/api/coding/paas/v4/chat/completions", {
 				method: "POST",
 				headers: {
@@ -594,7 +594,7 @@ Uptime: Active
 					Authorization: `Bearer ${process.env.ZAI_API_KEY}`,
 				},
 				body: JSON.stringify({
-					model: "glm-4.7",
+					model: "glm-4.5-air",
 					messages: [
 						{
 							role: "system",
