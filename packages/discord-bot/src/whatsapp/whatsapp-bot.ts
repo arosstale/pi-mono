@@ -267,23 +267,31 @@ export function createWhatsAppBot(dataPath: string): WAClient {
 		console.log("[WARN] [WHATSAPP] Disconnected:", reason);
 	});
 
-	// Message handler
-	client.on("message", async (msg: WAMessage) => {
+	// Message handler - use message_create to catch own messages too
+	client.on("message_create", async (msg: WAMessage) => {
 		const text = msg.body.trim();
+		console.log(`[WHATSAPP][DEBUG] Message received: "${text.substring(0, 50)}..." from ${msg.from}`);
+
 		if (!text) return;
 
 		// TRIGGER MODE: Only respond to messages starting with /ai, @pi, or !pi
 		// This makes it work like Discord bot - doesn't reply to every message
-		const triggerPrefixes = ["/ai ", "@pi ", "!pi ", "/ai\n", "@pi\n", "!pi\n"];
 		const lowerText = text.toLowerCase();
 
 		let triggered = false;
 		let cleanedText = text;
 
-		for (const prefix of triggerPrefixes) {
-			if (lowerText.startsWith(prefix)) {
+		// Check for trigger prefixes (with or without space/text after)
+		const triggerPatterns = [
+			{ pattern: /^\/ai\s*/i, name: "/ai" },
+			{ pattern: /^@pi\s*/i, name: "@pi" },
+			{ pattern: /^!pi\s*/i, name: "!pi" },
+		];
+
+		for (const { pattern } of triggerPatterns) {
+			if (pattern.test(text)) {
 				triggered = true;
-				cleanedText = text.slice(prefix.trim().length).trim();
+				cleanedText = text.replace(pattern, "").trim();
 				break;
 			}
 		}
@@ -292,6 +300,11 @@ export function createWhatsAppBot(dataPath: string): WAClient {
 		if (text.startsWith("/") && ["/help", "/mode", "/modes", "/status", "/clear"].some(cmd => lowerText.startsWith(cmd))) {
 			triggered = true;
 			cleanedText = text;
+		}
+
+		// If just trigger with no text, show help
+		if (triggered && !cleanedText) {
+			cleanedText = "/help";
 		}
 
 		// If not triggered, ignore the message
