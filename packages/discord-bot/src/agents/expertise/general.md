@@ -3,7 +3,7 @@
 ## Mental Model
 Accumulated expertise for general tasks.
 
-*Last updated: 2025-12-27 04:20:46 UTC*
+*Last updated: 2025-12-27 11:29:01 UTC*
 *Total sessions: 5*
 
 ## Patterns Learned
@@ -23,40 +23,36 @@ Accumulated expertise for general tasks.
 
 ## Session Insights
 
-### 2025-12-27 01:00:21 UTC
-**Task:** Long task
+### 2025-12-27 09:50:53 UTC
+**Task:** tell me more abou this
 
-Completed successfully.  [repeated]Completed succes
-
-### 2025-12-27 03:46:13 UTC
-**Task:** Any update I should care about
-
-**System**: ✅ All good - 63 days uptime, low load (0.09), 79GB RAM free
-
-### 2025-12-27 03:47:45 UTC
-**Task:** What about today
-
-Issue
-- Logrotate failed at midnight (duplicate log entry config)
-
-### 2025-12-27 03:57:03 UTC
-**Task:** What happened
-
-Found duplicate logrotate config causing cron errors
-
-### 2025-12-27 04:20:46 UTC
-**Task:** In your architecture
-
-found a perfect example! The auto-tool detection code demonstrates how we can apply these principles.
+Pattern
+- PostgreSQL persistence + WebSocket streaming
 
 
-pattern matching AND tool execution
+optimization techniques
 
+### 2025-12-27 09:52:52 UTC
+**Task:** contiune
 
-pattern of githubPatterns) {
+key
+# - HuggingFace: https://huggingface.co/settings/tokens
 
+### 2025-12-27 09:56:04 UTC
+**Task:** now that you're job
 
-pattern matching
+1. **"Now that you're job hunting..."** - How to use this stack for interviews?
+2. **"Now that you're job is done..."** - What's next after completing the training?
+3. **"Now that you're job ready..."** - How to position yourself with these skills?
 
+### 2025-12-27 09:57:27 UTC
+**Task:** "Now that you're job - irreplaceable-engineer-stack/
 
-Key Benefits
+**Got it!** You're asking how this `irreplaceable-engineer-stack` makes you **job-ready** / **irreplaceable**.
+
+### 2025-12-27 11:29:01 UTC
+**Task:** you done
+
+Example query:
+  curl "http://localhost:8888/ai-tools/tools.json?category=LLM&_size=5"
+```
