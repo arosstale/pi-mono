@@ -3,7 +3,7 @@
 ## Mental Model
 Accumulated expertise for general tasks.
 
-*Last updated: 2025-12-27 01:00:21 UTC*
+*Last updated: 2025-12-27 04:20:46 UTC*
 *Total sessions: 5*
 
 ## Patterns Learned
@@ -23,45 +23,40 @@ Accumulated expertise for general tasks.
 
 ## Session Insights
 
-### 2025-12-26 22:01:27 UTC
-**Task:** Status
-
-**Resources:**
-- Memory: 79GB available / 124GB total
-- Disk: 855GB free / 1.8TB (49% used)
-- Load: 0.23 (normal)
-
-### 2025-12-27 01:00:20 UTC
-**Task:** Implementation task
-
-### Patterns Discovered
-- Pattern 1
-- Pattern 2
-
-```typescript
-// Code example
-```
-
-### Recommendations
-- Use this approach
-- Avoid that pattern
-
-## Recommendations
-- Use this approach
-- Avoid that pattern
-
-### 2025-12-27 01:00:20 UTC
-**Task:** Task
-
-## Recommendations
-- Use this method going forward for similar tasks
-
-### 2025-12-27 01:00:20 UTC
-**Task:** Long task
-
-Successfully completed.  [repeated]Successfully com
-
 ### 2025-12-27 01:00:21 UTC
 **Task:** Long task
 
 Completed successfully.  [repeated]Completed succes
+
+### 2025-12-27 03:46:13 UTC
+**Task:** Any update I should care about
+
+**System**: ✅ All good - 63 days uptime, low load (0.09), 79GB RAM free
+
+### 2025-12-27 03:47:45 UTC
+**Task:** What about today
+
+Issue
+- Logrotate failed at midnight (duplicate log entry config)
+
+### 2025-12-27 03:57:03 UTC
+**Task:** What happened
+
+Found duplicate logrotate config causing cron errors
+
+### 2025-12-27 04:20:46 UTC
+**Task:** In your architecture
+
+found a perfect example! The auto-tool detection code demonstrates how we can apply these principles.
+
+
+pattern matching AND tool execution
+
+
+pattern of githubPatterns) {
+
+
+pattern matching
+
+
+Key Benefits
