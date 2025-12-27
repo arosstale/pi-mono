@@ -44,7 +44,7 @@ const PROVIDERS = {
 	openrouter_free: {
 		name: "OpenRouter (FREE)",
 		baseUrl: "https://openrouter.ai/api/v1",
-		defaultModel: "openai/gpt-oss-120b:free", // OpenAI's open-source 120B
+		defaultModel: "mistralai/devstral-2512:free", // Devstral 2 - fast coding model
 		getApiKey: () => process.env.OPENROUTER_API_KEY,
 	},
 	// Paid OpenRouter as last resort
@@ -58,12 +58,12 @@ const PROVIDERS = {
 
 // Free OpenRouter models to try in order
 const FREE_OPENROUTER_MODELS = [
+	"mistralai/devstral-2512:free",    // Devstral 2 - FAST coding (default)
 	"openai/gpt-oss-120b:free",        // OpenAI OSS 120B - best quality
 	"deepseek/deepseek-r1-0528:free",  // DeepSeek R1 - strong reasoning
 	"qwen/qwen3-coder-480b-a35b:free", // Qwen Coder 480B - coding
 	"z-ai/glm-4.5-air:free",           // GLM 4.5 Air - general
 	"moonshotai/kimi-k2-0711:free",    // Kimi K2 - agentic
-	"openai/gpt-oss-20b:free",         // OpenAI OSS 20B - faster
 ];
 
 type ProviderName = keyof typeof PROVIDERS;
