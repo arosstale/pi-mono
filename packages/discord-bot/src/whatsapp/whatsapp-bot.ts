@@ -170,6 +170,10 @@ function handleCommand(session: WhatsAppSession, command: string, args: string):
 		case "help":
 			return `*Pi WhatsApp Agent*
 
+*How to use:*
+Start message with /ai, @pi, or !pi
+Example: /ai what is bitcoin?
+
 *Commands:*
 • /help - Show this help
 • /mode <name> - Switch expert mode
@@ -183,9 +187,7 @@ function handleCommand(session: WhatsAppSession, command: string, args: string):
 • researcher - Deep research
 • trader - Market analysis
 • creative - Writing & content
-• security - Security analysis
-
-Just send a message to chat!`;
+• security - Security analysis`;
 
 		case "modes":
 			return Object.entries(WHATSAPP_EXPERT_MODES)
@@ -267,28 +269,42 @@ export function createWhatsAppBot(dataPath: string): WAClient {
 
 	// Message handler
 	client.on("message", async (msg: WAMessage) => {
-		// Ignore group messages unless mentioned (optional: remove this check to respond in groups)
-		const chatObj = await msg.getChat();
-		if (chatObj.isGroup) {
-			// Only respond if mentioned or replied to
-			const mentionedIds = await msg.getMentions();
-			const botInfo = client.info?.wid;
-			if (botInfo) {
-				const isMentioned = mentionedIds.some((m: any) => m.id?._serialized === botInfo._serialized);
-				if (!isMentioned && !msg.hasQuotedMsg) {
-					return;
-				}
-			}
-		}
-
 		const text = msg.body.trim();
 		if (!text) return;
 
+		// TRIGGER MODE: Only respond to messages starting with /ai, @pi, or !pi
+		// This makes it work like Discord bot - doesn't reply to every message
+		const triggerPrefixes = ["/ai ", "@pi ", "!pi ", "/ai\n", "@pi\n", "!pi\n"];
+		const lowerText = text.toLowerCase();
+
+		let triggered = false;
+		let cleanedText = text;
+
+		for (const prefix of triggerPrefixes) {
+			if (lowerText.startsWith(prefix)) {
+				triggered = true;
+				cleanedText = text.slice(prefix.trim().length).trim();
+				break;
+			}
+		}
+
+		// Also trigger on exact commands
+		if (text.startsWith("/") && ["/help", "/mode", "/modes", "/status", "/clear"].some(cmd => lowerText.startsWith(cmd))) {
+			triggered = true;
+			cleanedText = text;
+		}
+
+		// If not triggered, ignore the message
+		if (!triggered) {
+			return;
+		}
+
 		const session = getSession(msg.from);
+		const chatObj = await msg.getChat();
 
 		// Check for commands
-		if (text.startsWith("/")) {
-			const [cmd, ...argParts] = text.slice(1).split(/\s+/);
+		if (cleanedText.startsWith("/")) {
+			const [cmd, ...argParts] = cleanedText.slice(1).split(/\s+/);
 			const args = argParts.join(" ");
 			const response = handleCommand(session, cmd.toLowerCase(), args);
 			if (response) {
@@ -302,7 +318,7 @@ export function createWhatsAppBot(dataPath: string): WAClient {
 			// Send typing indicator
 			await chatObj.sendStateTyping();
 
-			const response = await runAgent(session, text);
+			const response = await runAgent(session, cleanedText);
 
 			// Split long messages (WhatsApp limit ~65000, but keep it readable)
 			if (response.length > 4000) {
