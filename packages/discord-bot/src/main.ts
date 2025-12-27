@@ -125,8 +125,6 @@ import {
 	getDGMStatus,
 	// E2B Cloud Sandbox
 	getE2BSandboxService,
-	isE2BAvailable,
-	runInSandbox,
 	// GEPA Prompt Optimization
 	getExpertiseDomains,
 	// Expertise Manager
@@ -162,6 +160,7 @@ import {
 	isAgentAvailable,
 	isARCAgentAvailable,
 	isClaudeAgentAvailable,
+	isE2BAvailable,
 	isOpenCodeAvailable,
 	isOpenEvolveAvailable,
 	// OpenHands
@@ -198,6 +197,7 @@ import {
 	runDebug,
 	runDocGeneration,
 	runFullTradingAudit,
+	runInSandbox,
 	runLearningAgent,
 	runOmni,
 	// OpenCode SDK (free Grok)
@@ -17466,9 +17466,10 @@ async function main() {
 								const result = await runInSandbox(code, { language: language as "python" | "node" | "bash" });
 
 								if (result.success) {
-									const output = result.output.length > 1900
-										? `${result.output.slice(0, 1900)}...\n\n[Output truncated]`
-										: result.output;
+									const output =
+										result.output.length > 1900
+											? `${result.output.slice(0, 1900)}...\n\n[Output truncated]`
+											: result.output;
 									await interaction.editReply(`✅ **Sandbox Execution Complete**\n\`\`\`\n${output}\n\`\`\``);
 								} else {
 									await interaction.editReply(`❌ **Sandbox Error**\n\`\`\`\n${result.error}\n\`\`\``);
@@ -17512,9 +17513,10 @@ async function main() {
 
 								if (result.success) {
 									const rawOutput = result.output || "(no output)";
-									const output = rawOutput.length > 1900
-										? `${rawOutput.slice(0, 1900)}...\n\n[Output truncated]`
-										: rawOutput;
+									const output =
+										rawOutput.length > 1900
+											? `${rawOutput.slice(0, 1900)}...\n\n[Output truncated]`
+											: rawOutput;
 									await interaction.editReply(`✅ **Command Complete**\n\`\`\`\n${output}\n\`\`\``);
 								} else {
 									await interaction.editReply(`❌ **Execution Error**\n\`\`\`\n${result.error}\n\`\`\``);
