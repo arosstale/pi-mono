@@ -6,6 +6,7 @@
 
 import { App, LogLevel } from "@slack/bolt";
 import { WebClient } from "@slack/web-api";
+import { chat } from "../ai-provider.js";
 import { getAllMcpTools } from "../mcp-tools.js";
 
 // ============================================================================
@@ -137,25 +138,15 @@ async function runAgent(session: SlackSession, userMessage: string): Promise<str
 			content: m.content,
 		}));
 
-		// Use OpenRouter API
-		const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-				"HTTP-Referer": "https://pi-agent.dev",
-				"X-Title": "Pi Slack Agent",
-			},
-			body: JSON.stringify({
-				model: "anthropic/claude-sonnet-4",
-				messages: [{ role: "system", content: mode.systemPrompt }, ...messages],
-				max_tokens: 4096,
-				stream: false,
-			}),
+		// Use central AI provider (Z.AI GLM or fallback)
+		const result = await chat({
+			messages: [{ role: "system", content: mode.systemPrompt }, ...messages],
+			maxTokens: 4096,
 		});
 
-		const result = await response.json();
-		const assistantMessage = result.choices?.[0]?.message?.content || "I apologize, I couldn't generate a response.";
+		const assistantMessage = result.success
+			? result.content
+			: `I apologize, I couldn't generate a response. Error: ${result.error}`;
 
 		// Add to history
 		session.messageHistory.push({ role: "assistant", content: assistantMessage });

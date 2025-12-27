@@ -7,6 +7,7 @@
 import { randomUUID } from "crypto";
 import { mkdir, unlink, writeFile } from "fs/promises";
 import { join } from "path";
+import { chat } from "../ai-provider.js";
 
 // ============================================================================
 // Types
@@ -201,41 +202,31 @@ class BrowserAutomationService {
 				return scrapeResult;
 			}
 
-			// Use AI to extract data (via OpenRouter)
-			const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-			if (!OPENROUTER_API_KEY) {
+			// Use AI to extract data (Z.AI GLM or fallback)
+			const result = await chat({
+				messages: [
+					{
+						role: "system",
+						content:
+							"You are a data extraction assistant. Extract the requested information from the webpage content. Be concise and accurate.",
+					},
+					{
+						role: "user",
+						content: `URL: ${url}\nTitle: ${scrapeResult.data?.title || "N/A"}\n\nContent:\n${scrapeResult.data?.content?.slice(0, 5000)}\n\nExtract: ${prompt}`,
+					},
+				],
+				maxTokens: 1000,
+			});
+
+			if (!result.success) {
 				return {
 					success: false,
-					error: "OPENROUTER_API_KEY not configured",
+					error: result.error || "AI extraction failed",
 					duration: Date.now() - start,
 				};
 			}
 
-			const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-				},
-				body: JSON.stringify({
-					model: "anthropic/claude-3-haiku",
-					messages: [
-						{
-							role: "system",
-							content:
-								"You are a data extraction assistant. Extract the requested information from the webpage content. Be concise and accurate.",
-						},
-						{
-							role: "user",
-							content: `URL: ${url}\nTitle: ${scrapeResult.data?.title || "N/A"}\n\nContent:\n${scrapeResult.data?.content?.slice(0, 5000)}\n\nExtract: ${prompt}`,
-						},
-					],
-					max_tokens: 1000,
-				}),
-			});
-
-			const result = await response.json();
-			const extractedContent = result.choices?.[0]?.message?.content || "No data extracted";
+			const extractedContent = result.content || "No data extracted";
 
 			return {
 				success: true,

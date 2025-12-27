@@ -5,6 +5,7 @@
 
 import type { AgentTool } from "@mariozechner/pi-ai";
 import { Type } from "@sinclair/typebox";
+import { chat, visionChat, getProviderInfo } from "./ai-provider.js";
 import {
 	getRunningAgents,
 	startVoiceAgent,
@@ -2695,46 +2696,18 @@ export function createImageAnalyzeTool(): AgentTool<typeof imageAnalyzeSchema> {
 			logMcpTool("image_analyze", label);
 
 			try {
-				const apiKey = process.env.OPENROUTER_API_KEY;
-				if (!apiKey) {
-					return { content: [{ type: "text", text: "OPENROUTER_API_KEY not configured" }], details: undefined };
+				// Use central AI provider (Z.AI GLM or fallback)
+				const result = await visionChat(prompt, imageUrl);
+
+				if (!result.success) {
+					return { content: [{ type: "text", text: `Vision API error: ${result.error}` }], details: undefined };
 				}
-
-				// Use a vision-capable model
-				const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-					method: "POST",
-					headers: {
-						Authorization: `Bearer ${apiKey}`,
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						model: "google/gemini-2.0-flash-001",
-						messages: [
-							{
-								role: "user",
-								content: [
-									{ type: "text", text: prompt },
-									{ type: "image_url", image_url: { url: imageUrl } },
-								],
-							},
-						],
-						max_tokens: 1000,
-					}),
-				});
-
-				if (!response.ok) {
-					const error = await response.text();
-					return { content: [{ type: "text", text: `Vision API error: ${error}` }], details: undefined };
-				}
-
-				const data = (await response.json()) as { choices: { message: { content: string } }[] };
-				const analysis = data.choices?.[0]?.message?.content || "No analysis returned";
 
 				return {
 					content: [
 						{
 							type: "text",
-							text: `**Image Analysis:**\n\n${analysis}`,
+							text: `**Image Analysis:**\n\n${result.content}`,
 						},
 					],
 					details: undefined,
@@ -3327,55 +3300,25 @@ export function createFileProcessTool(): AgentTool<typeof fileProcessSchema> {
 			try {
 				const ext = filename.split(".").pop()?.toLowerCase() || "";
 
-				// Image files - use vision API
+				// Image files - use vision API (Z.AI GLM or fallback)
 				if (["png", "jpg", "jpeg", "gif", "webp"].includes(ext) || contentType?.startsWith("image/")) {
-					const apiKey = process.env.OPENROUTER_API_KEY;
-					if (!apiKey) {
+					const result = await visionChat(
+						"Describe this image in detail. If it contains text, transcribe it. If it contains code, explain it.",
+						url
+					);
+
+					if (!result.success) {
 						return {
-							content: [{ type: "text", text: "Image analysis requires OPENROUTER_API_KEY" }],
+							content: [{ type: "text", text: `Vision API error: ${result.error}` }],
 							details: undefined,
 						};
 					}
-
-					const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-						method: "POST",
-						headers: {
-							Authorization: `Bearer ${apiKey}`,
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							model: "google/gemini-2.0-flash-001",
-							messages: [
-								{
-									role: "user",
-									content: [
-										{
-											type: "text",
-											text: "Describe this image in detail. If it contains text, transcribe it. If it contains code, explain it.",
-										},
-										{ type: "image_url", image_url: { url } },
-									],
-								},
-							],
-							max_tokens: 1500,
-						}),
-					});
-
-					if (!response.ok) {
-						return {
-							content: [{ type: "text", text: `Vision API error: ${await response.text()}` }],
-							details: undefined,
-						};
-					}
-
-					const data = (await response.json()) as { choices: { message: { content: string } }[] };
-					const analysis = data.choices?.[0]?.message?.content || "No analysis returned";
 
 					return {
 						content: [
 							{
 								type: "text",
-								text: `**Image Analysis (${filename}):**\n\n${analysis}`,
+								text: `**Image Analysis (${filename}):**\n\n${result.content}`,
 							},
 						],
 						details: undefined,
