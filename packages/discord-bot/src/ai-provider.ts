@@ -40,24 +40,36 @@ const PROVIDERS = {
 		defaultModel: "glm-4.7",
 		getApiKey: () => process.env.ZAI_API_KEY,
 	},
+	// OpenRouter FREE models - no cost fallback
+	openrouter_free: {
+		name: "OpenRouter (FREE)",
+		baseUrl: "https://openrouter.ai/api/v1",
+		defaultModel: "openai/gpt-oss-120b:free", // OpenAI's open-source 120B
+		getApiKey: () => process.env.OPENROUTER_API_KEY,
+	},
+	// Paid OpenRouter as last resort
 	openrouter: {
 		name: "OpenRouter",
 		baseUrl: "https://openrouter.ai/api/v1",
 		defaultModel: "anthropic/claude-sonnet-4",
 		getApiKey: () => process.env.OPENROUTER_API_KEY,
 	},
-	openai: {
-		name: "OpenAI",
-		baseUrl: "https://api.openai.com/v1",
-		defaultModel: "gpt-4o-mini",
-		getApiKey: () => process.env.OPENAI_API_KEY,
-	},
 } as const;
+
+// Free OpenRouter models to try in order
+const FREE_OPENROUTER_MODELS = [
+	"openai/gpt-oss-120b:free",        // OpenAI OSS 120B - best quality
+	"deepseek/deepseek-r1-0528:free",  // DeepSeek R1 - strong reasoning
+	"qwen/qwen3-coder-480b-a35b:free", // Qwen Coder 480B - coding
+	"z-ai/glm-4.5-air:free",           // GLM 4.5 Air - general
+	"moonshotai/kimi-k2-0711:free",    // Kimi K2 - agentic
+	"openai/gpt-oss-20b:free",         // OpenAI OSS 20B - faster
+];
 
 type ProviderName = keyof typeof PROVIDERS;
 
-// Default provider order - Z.AI first (cheapest with subscription)
-const PROVIDER_PRIORITY: ProviderName[] = ["zai", "openrouter", "openai"];
+// Default provider order - Z.AI first, then FREE OpenRouter, paid last
+const PROVIDER_PRIORITY: ProviderName[] = ["zai", "openrouter_free", "openrouter"];
 
 /**
  * Get the first available provider with a valid API key
@@ -83,7 +95,7 @@ export async function chat(options: ChatOptions): Promise<ChatResult> {
 		return {
 			success: false,
 			content: "",
-			error: "No AI provider configured. Set ZAI_API_KEY, OPENROUTER_API_KEY, or OPENAI_API_KEY",
+			error: "No AI provider configured. Set ZAI_API_KEY or OPENROUTER_API_KEY",
 			model: "none",
 		};
 	}
