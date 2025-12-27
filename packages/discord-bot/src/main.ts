@@ -19438,7 +19438,23 @@ async function main() {
 		logInfo("[SLACK] SLACK_BOT_TOKEN + (SLACK_SIGNING_SECRET or SLACK_APP_TOKEN) not set - Slack bot disabled");
 	}
 
-	logInfo("Event-driven triggers initialized (cron jobs + webhooks + analytics + telegram + slack)");
+	// ========================================================================
+	// WhatsApp Bot (Pi Remote Agent)
+	// ========================================================================
+
+	if (process.env.WHATSAPP_ENABLED === "true") {
+		try {
+			const { startWhatsAppBot, WHATSAPP_EXPERT_MODES } = await import("./whatsapp/index.js");
+			await startWhatsAppBot(workingDir);
+			logInfo(`[WHATSAPP] Expert modes: ${Object.keys(WHATSAPP_EXPERT_MODES).join(", ")}`);
+		} catch (error) {
+			logWarning("[WHATSAPP] Failed to start bot", error instanceof Error ? error.message : String(error));
+		}
+	} else {
+		logInfo("[WHATSAPP] WHATSAPP_ENABLED not set - WhatsApp bot disabled");
+	}
+
+	logInfo("Event-driven triggers initialized (cron jobs + webhooks + analytics + telegram + slack + whatsapp)");
 }
 
 main().catch((error) => {
